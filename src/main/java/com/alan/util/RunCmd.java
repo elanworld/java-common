@@ -28,7 +28,7 @@ public class RunCmd {
     public void run(String command) {
         try {
             p = Runtime.getRuntime().exec(command);
-            new Output("runing cmd: " + command);
+            Output.print("runing cmd: " + command);
             new KillCmd(p, timeout).start();
             streamOut = new StreamOut(p.getInputStream(),print);
             streamError = new StreamOut(p.getErrorStream(),print);
@@ -36,7 +36,7 @@ public class RunCmd {
                 streamOut.getResul();
                 streamError.getResul();
             }
-            new Output("finished cmd");
+            Output.print("finished cmd");
         } catch (Exception e) {
             e.printStackTrace();
         }
