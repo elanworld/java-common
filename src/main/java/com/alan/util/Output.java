@@ -1,16 +1,17 @@
 package com.alan.util;
 
-import java.text.Format;
+import java.io.PrintStream;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.logging.*;
 
 
 public class Output {
-    private static Format format;
+
     private static boolean show = true;
 
     public static <E> void print(E... objects) {
-        Logger log = new LogBox().getLog();
+        Logger log = LogBox.getInstance();
         String line = "";
         for (E object : objects) {
             try {
@@ -21,11 +22,11 @@ public class Output {
             }
         }
         line += "\n";
-        // log.setLevel(Level.WARNING);
         log.info(line);
         if (show) {
             System.out.print(line);
         }
+
 
     }
 
@@ -34,12 +35,22 @@ public class Output {
     }
 
     static class LogBox {
-        Logger log;
+        private static Logger log;
 
-        public LogBox() {
-            log = Logger.getLogger(Output.class.getName());
+        public static Logger getInstance() {
+            if (log != null) {
+                return log;
+            } else {
+                new LogBox();
+                return log;
+            }
+        }
+
+        private LogBox() {
+            log = Logger.getGlobal();
+            log.setUseParentHandlers(false);
             try {
-                FileHandler fileHandler = new FileHandler("log.log", true);
+                FileHandler fileHandler = new FileHandler(getLogPath(), true);
                 fileHandler.setFormatter(new Formatter() {
                     @Override
                     public String format(LogRecord record) {
@@ -47,7 +58,6 @@ public class Output {
                         Date date = DateBox.getDate(millis);
                         String format = DateBox.format(date, "[yyyy-MM-dd HH:mm:ss] ");
                         String line = format + record.getMessage();
-                        System.out.println(line);
                         return line;
                     }
                 });
@@ -57,8 +67,14 @@ public class Output {
             }
         }
 
-        public Logger getLog() {
-            return log;
+        private String getLogPath() {
+            String logDictory = System.getenv("logDictory");
+            if (logDictory != null) {
+                return Path.of(logDictory, "javaLog.log").toString();
+            } else {
+                return "javaLog.log";
+            }
         }
+
     }
 }

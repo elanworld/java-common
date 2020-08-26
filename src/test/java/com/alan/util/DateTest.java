@@ -2,6 +2,7 @@ package com.alan.util;
 
 import org.junit.Test;
 
+import java.io.*;
 import java.util.Date;
 
 public class DateTest {
@@ -17,5 +18,14 @@ public class DateTest {
         time += 600000;
         Date date = DateBox.getDate(time);
         Output.print(date, time);
+    }
+
+    @Test
+    public void cmd() {
+        PrintStream orgStdout = null;
+        PrintStream fileStdout = null;
+
+        orgStdout = System.out;
+        orgStdout.write(5);
     }
 }

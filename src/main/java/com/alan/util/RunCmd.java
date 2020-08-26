@@ -7,8 +7,8 @@ import java.util.Date;
 public class RunCmd {
     ArrayList<String> output = new ArrayList<String>();
     ArrayList<String> outError = new ArrayList<String>();
-    StreamOut streamOut;
-    StreamOut streamError;
+    private StreamOut streamOut;
+    private StreamOut streamError;
     Process p;
     boolean wait = true;
     int timeout = 60;

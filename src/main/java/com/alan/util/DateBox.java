@@ -1,8 +1,6 @@
 package com.alan.util;
 
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.text.Format;
 import java.util.Date;
 
 public class DateBox {
