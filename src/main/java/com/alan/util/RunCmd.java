@@ -7,8 +7,8 @@ import java.util.Date;
 public class RunCmd {
     ArrayList<String> output = new ArrayList<String>();
     ArrayList<String> outError = new ArrayList<String>();
-    private StreamOut streamOut;
-    private StreamOut streamError;
+    private StreamReader streamOut;
+    private StreamReader streamError;
     Process p;
     boolean wait = true;
     int timeout = 60;
@@ -27,16 +27,15 @@ public class RunCmd {
 
     public void run(String command) {
         try {
-            p = Runtime.getRuntime().exec(command);
             Output.print("runing cmd: " + command);
+            p = Runtime.getRuntime().exec(command);
             new KillCmd(p, timeout).start();
-            streamOut = new StreamOut(p.getInputStream(),print);
-            streamError = new StreamOut(p.getErrorStream(),print);
+            streamOut = new StreamReader(p.getInputStream(),print);
+            streamError = new StreamReader(p.getErrorStream(),print);
             if (wait) {
                 streamOut.getResul();
                 streamError.getResul();
             }
-            Output.print("finished cmd");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,18 +45,18 @@ public class RunCmd {
         return streamOut.getResul();
     }
 
-    public ArrayList<String> getOutError() {
+    public ArrayList<String> getError() {
         return streamError.getResul();
     }
 }
 
-class StreamOut extends Thread {
+class StreamReader extends Thread {
     public Thread t;
     InputStream input;
-    public ArrayList<String> outList = new ArrayList<String>();
-    boolean print = true;
+    public ArrayList<String> outList = new ArrayList<>();
+    boolean print;
 
-    public StreamOut(InputStream in, boolean print) {
+    public StreamReader(InputStream in, boolean print) {
         this.print = print;
         input = in;
         t = new Thread(this, getClass().getName());

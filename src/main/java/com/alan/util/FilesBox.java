@@ -2,6 +2,7 @@ package com.alan.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 public class FilesBox {
     static boolean dirListWalk = false;
     static String dirListFilter = "";
+    static int fileGrowth = 0;
 
     public static String[] pathSplit(String path) {
         File file = new File(path);
@@ -29,9 +31,22 @@ public class FilesBox {
         return outPath.toString();
     }
 
-    public static String outDirFile(String inputPath, int fileNum) {
+    public static String outFile(String inputPath, String addtion) {
         String[] paths = pathSplit(inputPath);
-        Path outPath = Paths.get(paths[0], "out", paths[1], paths[1] + "_" + String.valueOf(fileNum) + paths[2]);
+        Path outPath = Paths.get(paths[0], paths[1] + "_" + addtion + paths[2]);
+        return outPath.toString();
+    }
+
+    /**
+     * generate new filenames time by time
+     *
+     * @param inputPath
+     * @return
+     */
+    public static String outDirFile(String inputPath) {
+        fileGrowth += 1;
+        String[] paths = pathSplit(inputPath);
+        Path outPath = Paths.get(paths[0], "out", paths[1], paths[1] + "_" + String.valueOf(fileGrowth) + paths[2]);
         Path parent = outPath.getParent();
         mkdirOutPath(parent);
         return outPath.toString();
@@ -47,7 +62,7 @@ public class FilesBox {
 
     public static ArrayList<String> dictoryList(String dir) {
         ArrayList<String> list = new ArrayList<String>();
-        Path path = Path.of(dir);
+        Path path = new File(dir).toPath();
         try {
             Stream<Path> pathStream;
             if (dirListWalk) {
@@ -82,7 +97,7 @@ public class FilesBox {
 
     public static void move(String source, String dir) {
         String[] paths = pathSplit(source);
-        File file = Path.of(dir, paths[1] + paths[2]).toFile();
+        File file = new File(dir, paths[1] + paths[2]);
         new File(source).renameTo(file);
     }
 

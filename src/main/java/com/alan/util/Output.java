@@ -1,5 +1,6 @@
 package com.alan.util;
 
+import java.io.File;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.util.Date;
@@ -8,26 +9,29 @@ import java.util.logging.*;
 
 public class Output {
 
+    private static String line = "";
     private static boolean show = true;
 
     public static <E> void print(E... objects) {
         Logger log = LogBox.getInstance();
-        String line = "";
-        for (E object : objects) {
-            try {
-                String ob = String.valueOf(object);
-                line += ob + " ";
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        line += "\n";
+        getStr(objects);
         log.info(line);
         if (show) {
             System.out.print(line);
         }
+        line = "";
+    }
 
+    private static <E> void getStr(E... objects) {
+        for (Object object : objects) {
+            try {
+                line += String.valueOf(object) + " ";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        }
+        line += "\n";
     }
 
     public static void setShow(boolean show) {
@@ -68,9 +72,9 @@ public class Output {
         }
 
         private String getLogPath() {
-            String logDictory = System.getenv("logDictory");
+            String logDictory = System.getenv("LogDictory");
             if (logDictory != null) {
-                return Path.of(logDictory, "javaLog.log").toString();
+                return new File(logDictory, "javaLog.log").toString();
             } else {
                 return "javaLog.log";
             }
