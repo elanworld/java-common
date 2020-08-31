@@ -7,11 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class FilesBox {
     static boolean dirListWalk = false;
-    static String dirListFilter = "";
+    static String[] dirListFilter = new String[20];
     static int fileGrowth = 0;
 
     public static String[] pathSplit(String path) {
@@ -34,6 +35,12 @@ public class FilesBox {
     public static String outFile(String inputPath, String addtion) {
         String[] paths = pathSplit(inputPath);
         Path outPath = Paths.get(paths[0], paths[1] + "_" + addtion + paths[2]);
+        return outPath.toString();
+    }
+
+    public static String outExt(String inputPath, String ext) {
+        String[] paths = pathSplit(inputPath);
+        Path outPath = Paths.get(paths[0], paths[1] + "." + ext);
         return outPath.toString();
     }
 
@@ -74,8 +81,12 @@ public class FilesBox {
             for (Object object : objects) {
                 String fileObject = object.toString();
                 if (new File(fileObject).isFile())
-                    if (fileObject.matches(".*" + dirListFilter + ".*"))
-                        list.add(object.toString());
+                    for (String reg : dirListFilter) {
+                        if (fileObject.matches(".*" + reg + ".*")) {
+                            list.add(object.toString());
+                            break;
+                        }
+                    }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +99,7 @@ public class FilesBox {
         return dictoryList(dir);
     }
 
-    public static ArrayList<String> dictoryListFilter(String dir, String filter, boolean walk) {
+    public static ArrayList<String> dictoryListFilter(String dir, boolean walk, String... filter) {
         dirListWalk = walk;
         dirListFilter = filter;
         return dictoryList(dir);
@@ -101,5 +112,14 @@ public class FilesBox {
         new File(source).renameTo(file);
     }
 
+    public static void deleteFiles(List<String> deleteFiles) {
+        for (String file : deleteFiles) {
+            try {
+                Files.deleteIfExists(Paths.get(file));
+            } catch (Exception e) {
+                Output.print(e.getMessage());
+            }
+        }
+    }
 
 }

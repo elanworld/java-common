@@ -85,7 +85,7 @@ class StreamReader extends Thread {
     public ArrayList<String> getOutput(InputStream in) {
         ArrayList<String> list = new ArrayList<String>();
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, "gb2312"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
                 if (print) {
