@@ -2,11 +2,11 @@ package com.alan.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -91,12 +91,8 @@ public class FilesBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Collections.shuffle(list);
         return list;
-    }
-
-    public static ArrayList<String> dictoryWalk(String dir) {
-        dirListWalk = true;
-        return dictoryList(dir);
     }
 
     public static ArrayList<String> dictoryListFilter(String dir, boolean walk, String... filter) {
@@ -120,6 +116,17 @@ public class FilesBox {
                 Output.print(e.getMessage());
             }
         }
+    }
+
+    public static String inputIfNotExists(String file) {
+        if (Files.notExists(Paths.get(file))) {
+            while (true){
+                String input = StringContainer.input();
+                if (Files.exists(Paths.get(input)))
+                    return input;
+            }
+        }
+        return file;
     }
 
 }
