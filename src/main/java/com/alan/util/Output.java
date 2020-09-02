@@ -11,11 +11,14 @@ public class Output {
 
     private static String line = "";
     private static boolean show = true;
+    private static boolean log = true;
 
     public static <E> void print(E... objects) {
-        Logger log = LogBox.getInstance();
+        Logger logger = LogBox.getInstance();
         getStr(objects);
-        log.info(line);
+        if (log) {
+            logger.info(line);
+        }
         if (show) {
             System.out.print(line);
         }
@@ -36,6 +39,10 @@ public class Output {
 
     public static void setShow(boolean show) {
         Output.show = show;
+    }
+
+    public static void setLog(boolean log) {
+        Output.log = log;
     }
 
     static class LogBox {

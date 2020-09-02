@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class RunCmd {
+    private String cmdline;
+    private String[] cmdArrays;
     ArrayList<String> output = new ArrayList<String>();
     ArrayList<String> outError = new ArrayList<String>();
     private StreamReader streamOut;
@@ -15,23 +17,33 @@ public class RunCmd {
     boolean print = true;
 
     public RunCmd(String command) {
-        run(command);
+        this.cmdline = command;
+        run();
     }
 
     public RunCmd(String command, int timeout, boolean wait, boolean print) {
+        this.cmdline = command;
         this.wait = wait;
         this.timeout = timeout;
         this.print = print;
-        run(command);
+        run();
     }
 
-    public void run(String command) {
+    public RunCmd(String[] command, int timeout, boolean wait, boolean print) {
+        this.cmdArrays = command;
+        this.wait = wait;
+        this.timeout = timeout;
+        this.print = print;
+        run();
+    }
+
+    public void run() {
         try {
-            Output.print("runing cmd: " + command);
-            p = Runtime.getRuntime().exec(command);
+            Output.print("runing cmd: " + cmdline);
+            p = Runtime.getRuntime().exec(cmdline);
             new KillCmd(p, timeout).start();
-            streamOut = new StreamReader(p.getInputStream(),print);
-            streamError = new StreamReader(p.getErrorStream(),print);
+            streamOut = new StreamReader(p.getInputStream(), print);
+            streamError = new StreamReader(p.getErrorStream(), print);
             if (wait) {
                 streamOut.getResul();
                 streamError.getResul();
