@@ -36,6 +36,7 @@ public class StringContainer {
     public static String input() {
         String s = null;
         try {
+            System.out.print("please input: ");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             s = bufferedReader.readLine();
         } catch (IOException e) {
