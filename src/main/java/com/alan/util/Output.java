@@ -46,15 +46,13 @@ public class Output {
     }
 
     static class LogBox {
-        private static Logger log;
+        private static volatile Logger log;
 
-        public static Logger getInstance() {
-            if (log != null) {
-                return log;
-            } else {
+        public static synchronized Logger getInstance() {
+            if (log == null) {
                 new LogBox();
-                return log;
             }
+            return log;
         }
 
         private LogBox() {

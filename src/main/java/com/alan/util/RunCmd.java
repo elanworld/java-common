@@ -3,22 +3,23 @@ package com.alan.util;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class RunCmd {
+public class RunCmd implements RunCmdInterface {
     private String cmdline;
     private String[] cmdArrays;
-    ArrayList<String> output = new ArrayList<String>();
-    ArrayList<String> outError = new ArrayList<String>();
+    ArrayList<String> output = new ArrayList<>();
+    ArrayList<String> outError = new ArrayList<>();
     private StreamReader streamOut;
     private StreamReader streamError;
-    Process p;
+    Process process;
     boolean wait = true;
     int timeout = 60;
     boolean print = true;
 
     public RunCmd(String command) {
         this.cmdline = command;
-        run();
+        run(command);
     }
 
     public RunCmd(String command, int timeout, boolean wait, boolean print) {
@@ -26,31 +27,7 @@ public class RunCmd {
         this.wait = wait;
         this.timeout = timeout;
         this.print = print;
-        run();
-    }
-
-    public RunCmd(String[] command, int timeout, boolean wait, boolean print) {
-        this.cmdArrays = command;
-        this.wait = wait;
-        this.timeout = timeout;
-        this.print = print;
-        run();
-    }
-
-    public void run() {
-        try {
-            Output.print("runing cmd: " + cmdline);
-            p = Runtime.getRuntime().exec(cmdline);
-            new KillCmd(p, timeout).start();
-            streamOut = new StreamReader(p.getInputStream(), print);
-            streamError = new StreamReader(p.getErrorStream(), print);
-            if (wait) {
-                streamOut.getResul();
-                streamError.getResul();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        run(command);
     }
 
     public ArrayList<String> getOutput() {
@@ -60,12 +37,51 @@ public class RunCmd {
     public ArrayList<String> getError() {
         return streamError.getResul();
     }
+
+    public Process getProcess() {
+        return process;
+    }
+
+    @Override
+    public List<String> getResult() {
+        ArrayList<String> output = getOutput();
+        output.addAll(getError());
+        return output;
+    }
+
+    @Override
+    public void run(String command) {
+        try {
+            Output.print("runing cmd: " + command);
+            process = Runtime.getRuntime().exec(command);
+            new KillCmd(process, timeout).start();
+            streamOut = new StreamReader(process.getInputStream(), print);
+            streamError = new StreamReader(process.getErrorStream(), print);
+            if (wait) {
+                streamOut.getResul();
+                streamError.getResul();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void input(String input) {
+        OutputStream outputStream = process.getOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+        try {
+            outputStreamWriter.write(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 class StreamReader extends Thread {
     public Thread t;
     InputStream input;
-    public ArrayList<String> outList = new ArrayList<>();
+    public ArrayList<String> outList = new ArrayList<String>();
     boolean print;
 
     public StreamReader(InputStream in, boolean print) {

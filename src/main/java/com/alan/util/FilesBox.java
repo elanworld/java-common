@@ -1,7 +1,9 @@
 package com.alan.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -127,6 +129,18 @@ public class FilesBox {
             }
         }
         return file;
+    }
+
+    public static boolean writer(String text, String fileName) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write(text);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
 }

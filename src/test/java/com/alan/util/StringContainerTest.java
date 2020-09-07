@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class StringContainerTest {
     @Test
     public void findLine() {
-        ArrayList<String> lines = new ArrayList<>(Arrays.asList("abc","def","ghi","jk"));
+        ArrayList<String> lines = new ArrayList<String >(Arrays.asList("abc","def","ghi","jk"));
         ArrayList<String> found = StringContainer.findLine(lines, ".*(\\Dh)i");
         Output.print(found);
         Assert.assertEquals(1, found.size());

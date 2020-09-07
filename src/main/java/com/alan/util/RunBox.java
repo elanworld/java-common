@@ -9,8 +9,9 @@ public abstract class RunBox {
         this.cmdLine = cmdLine;
     }
 
-    public void run() {
+    public RunBox run() {
         new RunCmd(cmdLine);
+        return this;
     }
 
     public abstract List<String> getResult();
