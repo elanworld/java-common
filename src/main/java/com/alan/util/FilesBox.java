@@ -1,9 +1,7 @@
 package com.alan.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -122,7 +120,7 @@ public class FilesBox {
 
     public static String inputIfNotExists(String file) {
         if (Files.notExists(Paths.get(file))) {
-            while (true){
+            while (true) {
                 String input = StringContainer.input();
                 if (Files.exists(Paths.get(input)))
                     return input;
@@ -143,4 +141,22 @@ public class FilesBox {
         return false;
     }
 
+    public static boolean writer(List<String> text, String fileName) {
+        String join = String.join("\n", text);
+        return writer(join, fileName);
+    }
+
+    public static ArrayList<String> reader(String fileName) {
+        ArrayList<String> lines = new ArrayList<String>();
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
 }
