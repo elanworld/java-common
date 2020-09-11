@@ -6,13 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class FilesBox {
     static boolean dirListWalk = false;
-    static String[] dirListFilter = new String[20];
+    static List<String> dirListFilter = new ArrayList<>();
     static int fileGrowth = 0;
 
     public static String[] pathSplit(String path) {
@@ -68,7 +69,7 @@ public class FilesBox {
 
 
     public static ArrayList<String> dictoryList(String dir) {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         Path path = new File(dir).toPath();
         try {
             Stream<Path> pathStream;
@@ -81,6 +82,8 @@ public class FilesBox {
             for (Object object : objects) {
                 String fileObject = object.toString();
                 if (new File(fileObject).isFile())
+                    if (dirListFilter.isEmpty())
+                        list.add(object.toString());
                     for (String reg : dirListFilter) {
                         if (fileObject.matches(".*" + reg + ".*")) {
                             list.add(object.toString());
@@ -95,9 +98,9 @@ public class FilesBox {
         return list;
     }
 
-    public static ArrayList<String> dictoryListFilter(String dir, boolean walk, String... filter) {
+    public static ArrayList<String> dictoryListFilter(String dir, boolean walk, String... filters) {
         dirListWalk = walk;
-        dirListFilter = filter;
+        dirListFilter.addAll(Arrays.asList(filters));
         return dictoryList(dir);
     }
 
