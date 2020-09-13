@@ -34,6 +34,17 @@ public class StringContainer {
         return got;
     }
 
+    public static List<String> filter(List<String> data, List<String> filters) {
+        ArrayList<String> result = new ArrayList<>();
+        for (String line : data) {
+            for (String filter : filters) {
+                if (line.matches(".*" + filter + ".*"))
+                    result.add(line);
+            }
+        }
+        return result;
+    }
+
     public static String input() {
         String s = null;
         try {
@@ -55,6 +66,15 @@ public class StringContainer {
             }
 
         }
+    }
+
+    public static boolean checkChinese(String word) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(word);
+        if (m.find()) {
+            return true;
+        }
+        return false;
     }
 }
 

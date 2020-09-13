@@ -84,12 +84,12 @@ public class FilesBox {
                 if (new File(fileObject).isFile())
                     if (dirListFilter.isEmpty())
                         list.add(object.toString());
-                    for (String reg : dirListFilter) {
-                        if (fileObject.matches(".*" + reg + ".*")) {
-                            list.add(object.toString());
-                            break;
-                        }
+                for (String reg : dirListFilter) {
+                    if (fileObject.matches(".*" + reg + ".*")) {
+                        list.add(object.toString());
+                        break;
                     }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -161,5 +161,25 @@ public class FilesBox {
             e.printStackTrace();
         }
         return lines;
+    }
+
+    public static Object readObject(String file) {
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
+            Object object = objectInputStream.readObject();
+            return object;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void writeObject(Object object, String file) {
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
+            objectOutputStream.writeObject(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
