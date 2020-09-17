@@ -134,9 +134,9 @@ public class FilesBox {
 
     public static boolean writer(String text, String fileName) {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-            outputStreamWriter.write(text);
+            FileWriter fileWriter = new FileWriter(fileName);
+            fileWriter.write(text);
+            fileWriter.close();
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
