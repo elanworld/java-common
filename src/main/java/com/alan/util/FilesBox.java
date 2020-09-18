@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -81,20 +80,18 @@ public class FilesBox {
             Object[] objects = pathStream.toArray();
             for (Object object : objects) {
                 String fileObject = object.toString();
-                if (new File(fileObject).isFile())
-                    if (dirListFilter.isEmpty())
-                        list.add(object.toString());
-                for (String reg : dirListFilter) {
-                    if (fileObject.matches(".*" + reg + ".*")) {
-                        list.add(object.toString());
-                        break;
+                if (new File(fileObject).isFile()) {
+                    for (String reg : dirListFilter) {
+                        if (fileObject.matches(".*" + reg + ".*")) {
+                            list.add(object.toString());
+                            break;
+                        }
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Collections.shuffle(list);
         return list;
     }
 
