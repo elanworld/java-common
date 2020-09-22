@@ -5,14 +5,24 @@ import java.util.Date;
 
 public class DateBox {
 
-    public static String format(Date date, String fomat) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(fomat);
-        String format = simpleDateFormat.format(date);
-        return format;
+    public static String format(Date date, String format) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        String dateText = simpleDateFormat.format(date);
+        return dateText;
     }
 
     public static Date getDate(long stamp) {
         Date date = new Date(stamp);
         return date;
+    }
+    public static Date getDate(String dateText, String dateFormat) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+            Date parse = simpleDateFormat.parse(dateText);
+            return parse;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
