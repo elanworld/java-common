@@ -1,8 +1,6 @@
 package com.alan.util;
 
 import java.io.File;
-import java.io.PrintStream;
-import java.nio.file.Path;
 import java.util.Date;
 import java.util.logging.*;
 
@@ -65,8 +63,9 @@ public class Output {
                     public String format(LogRecord record) {
                         long millis = record.getMillis();
                         Date date = DateBox.getDate(millis);
-                        String format = DateBox.format(date, "[yyyy-MM-dd HH:mm:ss] ");
-                        String line = format + record.getMessage();
+                        // String invokerClassName = Thread.currentThread().getStackTrace()[9].getClassName();
+                        String time = DateBox.format(date, "yyyy-MM-dd HH:mm:ss");
+                        String line = String.format("[%s] %s",time, record.getMessage());
                         return line;
                     }
                 });
