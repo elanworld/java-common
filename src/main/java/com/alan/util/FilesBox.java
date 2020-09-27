@@ -55,17 +55,12 @@ public class FilesBox {
         String[] paths = pathSplit(inputPath);
         Path outPath = Paths.get(paths[0], "out", paths[1], paths[1] + "_" + String.valueOf(fileGrowth) + paths[2]);
         Path parent = outPath.getParent();
-        mkdirOutPath(parent);
-        return outPath.toString();
-    }
-
-    private static void mkdirOutPath(Path path) {
-        if (!Files.exists(path)) {
-            File file = new File(path.toString());
+        if (!Files.exists(parent)) {
+            File file = new File(parent.toString());
             file.mkdirs();
         }
+        return outPath.toString();
     }
-
 
     public static ArrayList<String> dictoryList(String dir) {
         ArrayList<String> list = new ArrayList<>();

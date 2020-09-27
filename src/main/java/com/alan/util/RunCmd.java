@@ -7,12 +7,10 @@ import java.util.List;
 
 public class RunCmd implements RunCmdInterface {
     private String cmdline;
-    private String[] cmdArrays;
-    ArrayList<String> output = new ArrayList<>();
-    ArrayList<String> outError = new ArrayList<>();
     private StreamReader streamOut;
     private StreamReader streamError;
     Process process;
+
     boolean wait = true;
     int timeout = 60;
     boolean print = true;
@@ -31,11 +29,11 @@ public class RunCmd implements RunCmdInterface {
     }
 
     public ArrayList<String> getOutput() {
-        return streamOut.getResul();
+        return streamOut.getResult();
     }
 
     public ArrayList<String> getError() {
-        return streamError.getResul();
+        return streamError.getResult();
     }
 
     public Process getProcess() {
@@ -52,14 +50,14 @@ public class RunCmd implements RunCmdInterface {
     @Override
     public void run(String command) {
         try {
-            Output.print("runing cmd: " + command);
+            Output.print("running cmd: " + command);
             process = Runtime.getRuntime().exec(command);
             new KillCmd(process, timeout).start();
             streamOut = new StreamReader(process.getInputStream(), print);
             streamError = new StreamReader(process.getErrorStream(), print);
             if (wait) {
-                streamOut.getResul();
-                streamError.getResul();
+                streamOut.getResult();
+                streamError.getResult();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +89,7 @@ class StreamReader extends Thread {
         t.start();
     }
 
-    public ArrayList<String> getResul() {
+    public ArrayList<String> getResult() {
         try {
             while (true) {
                 Thread.sleep(1000);
