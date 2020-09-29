@@ -1,4 +1,4 @@
-package data;
+package com.alan.data;
 
 import com.alan.data.Sqlite3Box;
 import com.alan.system.PathsBox;

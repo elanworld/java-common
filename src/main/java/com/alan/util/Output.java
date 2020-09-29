@@ -1,7 +1,7 @@
 package com.alan.util;
 
-import java.io.File;
-import java.util.Date;
+import com.alan.system.LogBox;
+
 import java.util.logging.*;
 
 
@@ -12,8 +12,8 @@ public class Output {
     private static boolean log = true;
 
     public static <E> void print(E... objects) {
-        Logger logger = LogBox.getInstance();
-        getStr(objects);
+        Logger logger = LogBox.getLogger();
+        parseDetail(objects);
         if (log) {
             logger.info(line);
         }
@@ -23,7 +23,7 @@ public class Output {
         line = "";
     }
 
-    private static <E> void getStr(E... objects) {
+    private static <E> void parseDetail(E... objects) {
         for (Object object : objects) {
             try {
                 line += String.valueOf(object) + " ";
@@ -43,46 +43,11 @@ public class Output {
         Output.log = log;
     }
 
-    static class LogBox {
-        private static volatile Logger log;
+    public static boolean isShow() {
+        return show;
+    }
 
-        public static synchronized Logger getInstance() {
-            if (log == null) {
-                new LogBox();
-            }
-            return log;
-        }
-
-        private LogBox() {
-            log = Logger.getGlobal();
-            log.setUseParentHandlers(false);
-            try {
-                FileHandler fileHandler = new FileHandler(getLogPath(), true);
-                fileHandler.setFormatter(new Formatter() {
-                    @Override
-                    public String format(LogRecord record) {
-                        long millis = record.getMillis();
-                        Date date = DateBox.getDate(millis);
-                        // String invokerClassName = Thread.currentThread().getStackTrace()[9].getClassName();
-                        String time = DateBox.format(date, "yyyy-MM-dd HH:mm:ss");
-                        String line = String.format("[%s] %s",time, record.getMessage());
-                        return line;
-                    }
-                });
-                log.addHandler(fileHandler);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        private String getLogPath() {
-            String logDictory = System.getenv("LogDictory");
-            if (logDictory != null) {
-                return new File(logDictory, "javaLog.log").toString();
-            } else {
-                return "javaLog.log";
-            }
-        }
-
+    public static boolean isLog() {
+        return log;
     }
 }
