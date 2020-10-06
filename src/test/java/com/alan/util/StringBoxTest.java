@@ -6,12 +6,13 @@ import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class StringContainerTest {
+public class StringBoxTest {
     @Test
     public void findLine() {
         ArrayList<String> lines = new ArrayList<String >(Arrays.asList("abc","def","ghi","jk"));
-        ArrayList<String> found = StringContainer.findLine(lines, ".*(\\Dh)i");
+        List<String> found = StringBox.findGroup(lines, ".*(\\Dh)i");
         Assert.assertEquals(1, found.size());
         if (!found.isEmpty()) {
             Assume.assumeTrue("regex need to fix",found.get(0).equals("gh"));
@@ -20,7 +21,7 @@ public class StringContainerTest {
 
     @Test
     public void checkChinese() {
-        boolean hh = StringContainer.checkChinese("hh faf的弟弟");
+        boolean hh = StringBox.checkChinese("hh faf的弟弟");
         Assume.assumeTrue(hh);
     }
 }

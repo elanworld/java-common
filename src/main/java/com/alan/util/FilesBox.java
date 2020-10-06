@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.alan.util.StringBox.findGroup;
+
 public class FilesBox {
     static boolean dirListWalk = false;
     static List<String> dirListFilter = new ArrayList<>();
@@ -44,6 +46,15 @@ public class FilesBox {
         return outPath.toString();
     }
 
+    public static boolean regexFiles(String dir, String regex) {
+        boolean got = false;
+        List<String> strings = dictoryList(dir);
+        List<String> found = findGroup(strings, regex);
+        if (found.size() > 0) got = true;
+        return got;
+    }
+
+
     /**
      * generate new filenames time by time
      *
@@ -76,10 +87,14 @@ public class FilesBox {
             for (Object object : objects) {
                 String fileObject = object.toString();
                 if (new File(fileObject).isFile()) {
-                    for (String reg : dirListFilter) {
-                        if (fileObject.matches(".*" + reg + ".*")) {
-                            list.add(object.toString());
-                            break;
+                    if (dirListFilter.isEmpty()) {
+                        list.add(object.toString());
+                    } else {
+                        for (String reg : dirListFilter) {
+                            if (fileObject.matches(".*" + reg + ".*")) {
+                                list.add(object.toString());
+                                break;
+                            }
                         }
                     }
                 }
@@ -116,7 +131,7 @@ public class FilesBox {
     public static String inputIfNotExists(String file) {
         if (Files.notExists(Paths.get(file))) {
             while (true) {
-                String input = StringContainer.input();
+                String input = StringBox.input();
                 if (Files.exists(Paths.get(input)))
                     return input;
             }
