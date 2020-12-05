@@ -1,9 +1,7 @@
 package com.alan.system;
 
 import com.alan.util.DateBox;
-import com.alan.util.Output;
 
-import java.io.File;
 import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
@@ -34,7 +32,7 @@ public class LogBox {
         log = Logger.getGlobal();
         log.setUseParentHandlers(false);
         try {
-            FileHandler fileHandler = new FileHandler(getLogPath(), true);
+            FileHandler fileHandler = new FileHandler(PathsEnum.LOG_PATH.getPath(), true);
             fileHandler.setFormatter(new Formatter() {
                 @Override
                 public String format(LogRecord record) {
@@ -52,23 +50,10 @@ public class LogBox {
         }
     }
 
-    private String getLogPath() {
-        if (logDirectory != null) {
-            return logDirectory;
-        }
-        String logDirectory = System.getenv("MyResources");
-        if (logDirectory != null) {
-            return new File(logDirectory, "javaLog.log").toString();
-        } else {
-            return "javaLog.log";
-        }
-    }
-
     // log4j
     private final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogBox.class.getName());
 
     public synchronized static org.apache.log4j.Logger getLog4j() {
         return logger;
     }
-
 }
