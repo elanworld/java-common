@@ -1,7 +1,6 @@
 package com.alan.util;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
@@ -19,10 +18,9 @@ public class Options {
         String line = null;
         try {
             System.out.print("please input:");
-            InputStream in = System.in;
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             line = br.readLine();
-            Output.print(String.format("input:[%s]",line));
+            Output.print(String.format("input:[%s]", line));
         } catch (Exception e) {
             e.printStackTrace();
         }

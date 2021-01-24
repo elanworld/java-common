@@ -3,7 +3,7 @@ package com.alan.system;
 import java.io.File;
 
 public enum PathsEnum {
-    MY_DB("G:\\Alan\\Documents\\OneDrive\\Documents\\program\\resources\\mydata.db"),
+    MY_DB("G:\\Alan\\Documents\\OneDrive\\Documents\\program\\resources\\data_box.db"),
     TEST("G:\\Alan\\Documents\\OneDrive\\Documents\\program\\resources\\test.db"),
     LOG_PATH(getLogPath());
 
