@@ -7,7 +7,7 @@ public class DateBox {
 
 	public static String format(Date date, String format) {
 		if (format == null || format.equals("")) {
-			format = "YYYY-MM-DD HH:mm:ss";
+			format = "YYYY-MM-dd HH:mm:ss";
 		}
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
 		String dateText = simpleDateFormat.format(date);
