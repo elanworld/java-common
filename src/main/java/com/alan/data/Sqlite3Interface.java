@@ -1,7 +1,9 @@
 package com.alan.data;
 
-public interface Sqlite3Interface {
+import java.io.Closeable;
+
+public interface Sqlite3Interface extends Closeable {
     void setDbFile(String dbFile);
+
     void runSql(String sqlCommand);
-    void close();
 }

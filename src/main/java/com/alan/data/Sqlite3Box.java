@@ -1,5 +1,6 @@
 package com.alan.data;
 
+import com.alan.util.Output;
 import org.sqlite.JDBC;
 
 import java.sql.Connection;
@@ -7,10 +8,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class Sqlite3Box implements Sqlite3Interface{
+public class Sqlite3Box implements Sqlite3Interface {
     String dbFile;
     Connection connection;
     Statement statement;
+    int run_time = 0;
+    int err_time = 0;
 
     public Sqlite3Box(String dbFile) {
         setDbFile(dbFile);
@@ -24,11 +27,12 @@ public class Sqlite3Box implements Sqlite3Interface{
 
     @Override
     public void runSql(String sqlCommand) {
-        runSql(sqlCommand,false);
+        runSql(sqlCommand, false);
     }
 
     @Override
     public void close() {
+        Output.print("success time:", run_time - err_time, " / ", run_time);
         try {
             statement.close();
             connection.close();
@@ -43,22 +47,24 @@ public class Sqlite3Box implements Sqlite3Interface{
         }
         try {
             new JDBC();
-             connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
-             statement = connection.createStatement();
-        } catch (Exception e ) {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
+            statement = connection.createStatement();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public ResultSet runSql(String sqlCommand, boolean returnResult) {
         try {
+            run_time += 1;
             if (returnResult) {
-                ResultSet resultSet = statement.executeQuery(sqlCommand);
-                return resultSet;
+                return statement.executeQuery(sqlCommand);
             } else {
                 statement.execute(sqlCommand);
             }
         } catch (Exception e) {
+            err_time += 1;
+            Output.print("wrong sql:", sqlCommand);
             e.printStackTrace();
         }
         return null;
