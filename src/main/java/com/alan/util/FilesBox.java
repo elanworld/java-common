@@ -7,13 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FilesBox {
-	static boolean dirListWalk = false;
-	static List<String> dirListFilter = new ArrayList<>();
 	static int fileGrowth = 0;
 
 	public static String[] pathSplit(String path) {
@@ -73,7 +71,12 @@ public class FilesBox {
 		return outPath.toString();
 	}
 
-	public static ArrayList<String> dictoryList(String dir) {
+	public static List<String> dictoryList(String dir) {
+		return dictoryListFilter(dir, false);
+	}
+
+	public static List<String> dictoryListFilter(String dir, boolean walk, String... filters) {
+
 		ArrayList<String> list = new ArrayList<>();
 		File fileDir = new File(dir);
 		if (!fileDir.isDirectory()) {
@@ -82,21 +85,21 @@ public class FilesBox {
 		Path path = fileDir.toPath();
 		try {
 			Stream<Path> pathStream;
-			if (dirListWalk) {
+			if (walk) {
 				pathStream = Files.walk(path);
 			} else {
 				pathStream = Files.list(path);
 			}
-			Object[] objects = pathStream.toArray();
-			for (Object object : objects) {
-				String fileObject = object.toString();
+			List<String> paths = pathStream.map(Path::toString).collect(Collectors.toList());
+			for (Object p : paths) {
+				String fileObject = p.toString();
 				if (new File(fileObject).isFile()) {
-					if (dirListFilter.isEmpty()) {
-						list.add(object.toString());
+					if (filters.length == 0) {
+						list.add(p.toString());
 					} else {
-						for (String reg : dirListFilter) {
+						for (String reg : filters) {
 							if (fileObject.matches(".*" + reg + ".*")) {
-								list.add(object.toString());
+								list.add(p.toString());
 								break;
 							}
 						}
@@ -107,12 +110,6 @@ public class FilesBox {
 			e.printStackTrace();
 		}
 		return list;
-	}
-
-	public static ArrayList<String> dictoryListFilter(String dir, boolean walk, String... filters) {
-		dirListWalk = walk;
-		dirListFilter.addAll(Arrays.asList(filters));
-		return dictoryList(dir);
 	}
 
 	public static void move(String source, String dir) {
@@ -160,7 +157,7 @@ public class FilesBox {
 		return writer(join, fileName);
 	}
 
-	public static ArrayList<String> reader(String fileName) {
+	public static List<String> reader(String fileName) {
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
