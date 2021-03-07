@@ -20,7 +20,7 @@ public class Options {
 			Output.print("please input:");
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			line = br.readLine();
-			Output.print(String.format("you input tes:[%s]", line));
+			Output.print(String.format("you input is:[%s]", line));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -19,21 +19,21 @@ public class FilesBox {
 		String name = file.getName();
 		String parent = file.getParent();
 		String[] split = name.split("\\.");
-		String basename = split[0];
-		String ext = "." + split[1];
+		String ext = "";
+		String basename = "";
+		if (split.length >= 2) {
+			ext = "." + split[1];
+		}
+		if (split.length >= 1) {
+			basename = split[0];
+		}
 		String[] paths = {parent, basename, ext, name};
 		return paths;
 	}
 
-	public static String outFile(String inputPath) {
+	public static String outFile(String inputPath, String add) {
 		String[] paths = pathSplit(inputPath);
-		Path outPath = Paths.get(paths[0], paths[1] + "_out" + paths[2]);
-		return outPath.toString();
-	}
-
-	public static String outFile(String inputPath, String addtion) {
-		String[] paths = pathSplit(inputPath);
-		Path outPath = Paths.get(paths[0], paths[1] + "_" + addtion + paths[2]);
+		Path outPath = Paths.get(paths[0], paths[1] + "_" + add + paths[2]);
 		return outPath.toString();
 	}
 
@@ -43,9 +43,14 @@ public class FilesBox {
 		return outPath.toString();
 	}
 
+	public static String outBasename(String inputPath) {
+		String[] strings = pathSplit(inputPath);
+		return strings[1];
+	}
+
 	public static boolean regexFiles(String dir, String regex) {
 		boolean got = false;
-		List<String> strings = dictoryList(dir);
+		List<String> strings = directoryList(dir);
 		List<String> found = findGroup(strings, regex);
 		if (found.size() > 0) {
 			got = true;
@@ -71,11 +76,11 @@ public class FilesBox {
 		return outPath.toString();
 	}
 
-	public static List<String> dictoryList(String dir) {
-		return dictoryListFilter(dir, false);
+	public static List<String> directoryList(String dir) {
+		return directoryListFilter(dir, false);
 	}
 
-	public static List<String> dictoryListFilter(String dir, boolean walk, String... filters) {
+	public static List<String> directoryListFilter(String dir, boolean walk, String... filters) {
 
 		ArrayList<String> list = new ArrayList<>();
 		File fileDir = new File(dir);
@@ -118,13 +123,11 @@ public class FilesBox {
 		new File(source).renameTo(file);
 	}
 
-	public static void deleteFiles(List<String> deleteFiles) {
-		for (String file : deleteFiles) {
-			try {
-				Files.deleteIfExists(Paths.get(file));
-			} catch (Exception e) {
-				Output.print(e.getMessage());
-			}
+	public static void deleteFiles(String deleteFile) {
+		try {
+			Files.deleteIfExists(Paths.get(deleteFile));
+		} catch (Exception e) {
+			Output.print(e.getMessage());
 		}
 	}
 
