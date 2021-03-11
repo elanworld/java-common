@@ -3,6 +3,7 @@ package com.alan.util;
 import static com.alan.util.StringBox.findGroup;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,7 +38,7 @@ public class FilesBox {
 		return outPath.toString();
 	}
 
-	public static String outExt(String inputPath, String ext) {
+	public static String changeExt(String inputPath, String ext) {
 		String[] paths = pathSplit(inputPath);
 		Path outPath = Paths.get(paths[0], paths[1] + "." + ext);
 		return outPath.toString();
@@ -46,6 +47,17 @@ public class FilesBox {
 	public static String outBasename(String inputPath) {
 		String[] strings = pathSplit(inputPath);
 		return strings[1];
+	}
+
+	public static String outDir(String inputPath, String add) {
+		if (add == null) {
+			add = "out";
+		}
+		File file = new File(new File(inputPath).getParent(), add);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		return file.getAbsolutePath();
 	}
 
 	public static boolean regexFiles(String dir, String regex) {
@@ -143,11 +155,12 @@ public class FilesBox {
 		return file;
 	}
 
-	public static boolean writer(String text, String fileName) {
+	public static boolean writer(String text, String filePath) {
 		try {
-			FileWriter fileWriter = new FileWriter(fileName);
-			fileWriter.write(text);
-			fileWriter.close();
+			BufferedWriter writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8));
+			writer.write(text);
+			writer.close();
 			return true;
 		} catch (Exception ex) {
 			ex.printStackTrace();

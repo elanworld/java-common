@@ -84,6 +84,7 @@ public class RunCmd implements RunCmdInterface {
 
 	public void run(String command) {
 		this.command = command;
+		run();
 	}
 
 	public void setEnvDir(String envDir) {
