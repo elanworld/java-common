@@ -1,6 +1,7 @@
 package com.alan.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.Duration;
@@ -8,26 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RunCmd implements RunCmdInterface {
-	private String cmdline;
 	private StreamReader streamOut;
 	private StreamReader streamError;
 	private Process process;
 	private File envDir = null;
 
-	boolean wait = true;
-	Duration timeout = Duration.ofMinutes(1L);
-	boolean isPrint = true;
+	protected String command;
+	protected boolean wait = true;
+	protected Duration timeout = Duration.ofMinutes(1L);
+	protected boolean isPrint = true;
 
 	public RunCmd() {
 	}
 
 	public RunCmd(String command) {
-		this.cmdline = command;
+		this.command = command;
 		run(command);
 	}
 
 	public RunCmd(String command, int timeout, boolean wait, boolean isPrint) {
-		this.cmdline = command;
+		this.command = command;
 		this.wait = wait;
 		this.timeout = Duration.ofSeconds(timeout);
 		this.isPrint = isPrint;
@@ -47,17 +48,10 @@ public class RunCmd implements RunCmdInterface {
 	}
 
 	@Override
-	public List<String> getResult() {
-		ArrayList<String> output = getOutput();
-		output.addAll(getError());
-		return output;
-	}
-
-	@Override
-	public void run(String command) {
+	public void run() {
+		Output.print("running cmd: " + this.command);
 		try {
-			Output.print("running cmd: " + command);
-			process = Runtime.getRuntime().exec(command, null, envDir);
+			process = Runtime.getRuntime().exec(this.command, null, envDir);
 			new KillCmd(process, timeout).start();
 			streamOut = new StreamReader(process.getInputStream(), isPrint);
 			streamError = new StreamReader(process.getErrorStream(), isPrint);
@@ -65,9 +59,16 @@ public class RunCmd implements RunCmdInterface {
 				streamOut.getResult();
 				streamError.getResult();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<String> getResult() {
+		ArrayList<String> output = getOutput();
+		output.addAll(getError());
+		return output;
 	}
 
 	@Override
@@ -81,11 +82,23 @@ public class RunCmd implements RunCmdInterface {
 		}
 	}
 
+	public void run(String command) {
+		this.command = command;
+	}
+
 	public void setEnvDir(String envDir) {
 		this.envDir = new File(envDir);
 	}
 
 	public void setTimeout(Duration timeout) {
 		this.timeout = timeout;
+	}
+
+	public void setWait(boolean wait) {
+		this.wait = wait;
+	}
+
+	public void setPrint(boolean print) {
+		isPrint = print;
 	}
 }
