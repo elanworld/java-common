@@ -1,12 +1,15 @@
 package com.alan.system;
 
-import com.alan.util.Output;
 import org.junit.Test;
 
-
 public class LogBoxTest {
-    @Test
-    public void test() {
-        Output.print("test1","test2");
-    }
+	@Test
+	public void getLogger() {
+		LogBox.getLogger().info("java util log test");
+	}
+
+	@Test
+	public void getLog4j() {
+		LogBox.getLog4j().info("log4j test");
+	}
 }
