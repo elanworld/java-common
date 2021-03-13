@@ -9,6 +9,7 @@ package com.alan.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -51,7 +52,7 @@ class StreamReader extends Thread {
 	public ArrayList<String> getOutput(InputStream in) {
 		ArrayList<String> list = new ArrayList<String>();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 			String line;
 			while ((line = br.readLine()) != null) {
 				if (print) {
