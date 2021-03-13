@@ -48,4 +48,15 @@ public class StringBox {
 		}
 		return false;
 	}
+
+	public static double likePercent(String var1, String var2) {
+		int l = Math.min(var1.length(), var2.length());
+		double same = 0;
+		for (int i = 0; i < l; i++) {
+			if (var1.charAt(i) == var2.charAt(i)) {
+				same += 1;
+			}
+		}
+		return same / (Math.max(var1.length(), var2.length()));
+	}
 }

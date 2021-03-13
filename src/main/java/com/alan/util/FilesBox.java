@@ -28,8 +28,7 @@ public class FilesBox {
 		if (split.length >= 1) {
 			basename = split[0];
 		}
-		String[] paths = {parent, basename, ext, name};
-		return paths;
+		return new String[]{parent, basename, ext, name};
 	}
 
 	public static String outFile(String inputPath, String add) {
@@ -141,6 +140,20 @@ public class FilesBox {
 		} catch (Exception e) {
 			Output.print(e.getMessage());
 		}
+	}
+
+	public static String renameIfLike(String origin, String likePath) {
+		String[] origins = pathSplit(origin);
+		String[] likePaths = pathSplit(likePath);
+		if (origins[1].equals(likePaths[1])) {
+			return likePath;
+		}
+		if (StringBox.likePercent(origins[1], likePaths[1]) > 0.7) {
+			File file = new File(likePaths[0], origins[1] + likePaths[2]);
+			new File(likePath).renameTo(file);
+			return file.getAbsolutePath();
+		}
+		return null;
 	}
 
 	public static String inputIfNotExists(String file) {
