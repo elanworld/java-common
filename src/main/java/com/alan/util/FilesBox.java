@@ -189,7 +189,8 @@ public class FilesBox {
 	public static List<String> reader(String fileName) {
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
 			String line;
 			while ((line = br.readLine()) != null) {
 				lines.add(line);
@@ -200,23 +201,19 @@ public class FilesBox {
 		return lines;
 	}
 
-	public static Object readObject(String file) {
+	public static <T> T readObject(String file, Class<T> clazz) {
 		try {
 			ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
 			Object object = objectInputStream.readObject();
-			return object;
+			return (T) object;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public static void writeObject(Object object, String file) {
-		try {
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
-			objectOutputStream.writeObject(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void writeObject(Object object, String file) throws IOException {
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
+		objectOutputStream.writeObject(object);
 	}
 }
