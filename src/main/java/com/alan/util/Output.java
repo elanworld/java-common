@@ -22,7 +22,9 @@ public class Output {
 
 		parseDetail(objects);
 		PrintStream filePrintStream = ConsoleReader.getFilePrintStream();
-		filePrintStream.print(simpleDateFormat.format(new Date()));
+		if (filePrint) {
+			filePrintStream.print(simpleDateFormat.format(new Date()));
+		}
 		if (log) {
 			LogBox.getLogger().info(line.toString());
 		}
