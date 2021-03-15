@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class Options {
 	public static void sleep(int second) {
 		try {
-			Output.print("wait for(seconds): " + second);
+			Output.print(String.format("wait for %s seconds", second));
 			TimeUnit.SECONDS.sleep(second);
 		} catch (Exception e) {
 			e.printStackTrace();
