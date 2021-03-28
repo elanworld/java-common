@@ -142,13 +142,13 @@ public class FilesBox {
 		}
 	}
 
-	public static String renameIfLike(String origin, String likePath) {
+	public static String renameIfLike(String origin, String likePath, double likePercent) {
 		String[] origins = pathSplit(origin);
 		String[] likePaths = pathSplit(likePath);
 		if (origins[1].equals(likePaths[1])) {
 			return likePath;
 		}
-		if (StringBox.likePercent(origins[1], likePaths[1]) > 0.7) {
+		if (StringBox.likePercent(origins[1], likePaths[1]) > likePercent) {
 			File file = new File(likePaths[0], origins[1] + likePaths[2]);
 			new File(likePath).renameTo(file);
 			return file.getAbsolutePath();
