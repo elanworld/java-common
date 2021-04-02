@@ -40,6 +40,13 @@ public class StringBox {
 		return s;
 	}
 
+	public static String getParam(String[] args, int index) {
+		if (args.length >= index) {
+			return args[index - 1];
+		}
+		return input();
+	}
+
 	public static boolean checkChinese(String word) {
 		Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
 		Matcher m = p.matcher(word);
