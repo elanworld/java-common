@@ -10,9 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpBox implements HttpBoxInterface {
+public class HttpBox {
 
-	@Override
 	public String get(String link) {
 		String result = null;
 		InputStream is;
@@ -62,7 +61,6 @@ public class HttpBox implements HttpBoxInterface {
 		return header;
 	}
 
-	@Override
 	public String post(String url) {
 		return null;
 	}
