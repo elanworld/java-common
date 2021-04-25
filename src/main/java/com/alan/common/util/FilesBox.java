@@ -195,6 +195,7 @@ public class FilesBox {
 			while ((line = br.readLine()) != null) {
 				lines.add(line);
 			}
+			br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
