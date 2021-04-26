@@ -131,7 +131,11 @@ public class FilesBox {
 	public static void move(String source, String dir) {
 		String[] paths = pathSplit(source);
 		File file = new File(dir, paths[1] + paths[2]);
-		new File(source).renameTo(file);
+		rename(source, file.getAbsolutePath());
+	}
+
+	public static boolean rename(String source, String target) {
+		return new File(source).renameTo(new File(target));
 	}
 
 	public static void deleteFiles(String deleteFile) {
