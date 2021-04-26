@@ -43,7 +43,7 @@ public class BaiduTranslator {
 	private static void runWait() {
 		long timeMillis = System.currentTimeMillis();
 		long duration = timeMillis - lastRunTime;
-		int total = 150;
+		int total = 50;
 		if (duration < total) {
 			try {
 				Thread.sleep(total - duration);
