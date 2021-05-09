@@ -2,13 +2,12 @@ package com.alan.common.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.concurrent.TimeUnit;
 
 public class Options {
-	public static void sleep(int second) {
+	public static void sleep(double second) {
 		try {
 			Output.print(String.format("wait for %s seconds", second));
-			TimeUnit.SECONDS.sleep(second);
+			Thread.sleep((long) (second * 1000L));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
