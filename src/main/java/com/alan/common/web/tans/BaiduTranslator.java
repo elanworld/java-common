@@ -15,6 +15,7 @@ public class BaiduTranslator {
 	private static final String APP_ID = "20210307000718292";
 	private static final String SECURITY_KEY = "1N3ocBDQzGCBsZr6iMBi";
 	private static long lastRunTime = 0;
+	private static final int total = 10;
 
 	public static String translate(String query, boolean toZh) {
 		runWait();
@@ -38,12 +39,11 @@ public class BaiduTranslator {
 	}
 
 	/**
-	 * 普通百度翻译api 间隔1s
+	 * 认证用户api 间隔10ms
 	 */
 	private static void runWait() {
 		long timeMillis = System.currentTimeMillis();
 		long duration = timeMillis - lastRunTime;
-		int total = 50;
 		if (duration < total) {
 			try {
 				Thread.sleep(total - duration);

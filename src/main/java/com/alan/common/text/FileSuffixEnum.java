@@ -9,7 +9,7 @@ package com.alan.common.text;
 import java.util.Arrays;
 
 public enum FileSuffixEnum {
-	MP_4("mp4"), MKV("mkv"), WEBM("webm"), MP_3("mp3"), WAV("wav"), SRT("srt"),;
+	MP_4("mp4"), AVI("avi"), MKV("mkv"), WEBM("webm"), MP_3("mp3"), WAV("wav"), SRT("srt"),;
 
 	private String suffix;
 	FileSuffixEnum(String suffix) {
