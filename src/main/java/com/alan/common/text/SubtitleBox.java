@@ -102,7 +102,8 @@ public class SubtitleBox implements SubtitleBoxInterface {
 			boolean isNum = numMat.find();
 			boolean isTime = timeMat.find();
 			if (isNum) {
-				subtitleBodies.add(subtitleBody.clone());
+				subtitleBody = subtitleBody.clone();
+				subtitleBodies.add(subtitleBody);
 				subtitleBody.init();
 				subtitleBody.setNum(Integer.parseInt(numMat.group(1)));
 			}
