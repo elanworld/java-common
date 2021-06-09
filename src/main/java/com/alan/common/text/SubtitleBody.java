@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubtitleBody implements Serializable, Cloneable {
-    private static final long serialVersionUID = -8368216151347926819L;
-    int num;
+	private static final long serialVersionUID = -8368216151347926819L;
+	int num;
 	double start;
 	double end;
 	List<String> text;
@@ -69,8 +69,8 @@ public class SubtitleBody implements Serializable, Cloneable {
 
 	public void addText(String text) {
 		if (!text.equals("\n")) {
-            this.text.add(text);
-        }
+			this.text.add(text);
+		}
 	}
 
 	private String computeTime(double time) {
@@ -93,17 +93,17 @@ public class SubtitleBody implements Serializable, Cloneable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
-            return true;
-        }
+			return true;
+		}
 		if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+			return false;
+		}
 		SubtitleBody that = (SubtitleBody) o;
 		return Double.compare(that.start, start) == 0 && Double.compare(that.end, end) == 0;
 	}
 
 	@Override
 	public String toString() {
-		return "SubtitleBody{" + "num=" + num + ", start=" + start + ", end=" + end + ", english='" + text + '\'' + '}';
+		return "SubtitleBody{" + "num=" + num + ", start=" + start + ", end=" + end + ", text='" + text + '\'' + '}';
 	}
 }
