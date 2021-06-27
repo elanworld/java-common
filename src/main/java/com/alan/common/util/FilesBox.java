@@ -48,11 +48,11 @@ public class FilesBox {
 		return strings[1];
 	}
 
-	public static String outDir(String inputPath, String add) {
+	public static String outDir(String inputFile, String add) {
 		if (add == null) {
 			add = "out";
 		}
-		File file = new File(new File(inputPath).getParent(), add);
+		File file = new File(new File(inputFile).getParent(), add);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
