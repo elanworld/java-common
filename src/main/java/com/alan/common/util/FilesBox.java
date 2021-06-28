@@ -37,6 +37,11 @@ public class FilesBox {
 		return outPath.toString();
 	}
 
+	public static String outFile(String inputPath) {
+		fileGrowth++;
+		return outFile(inputPath, String.valueOf(fileGrowth));
+	}
+
 	public static String changeExt(String inputPath, String ext) {
 		String[] paths = pathSplit(inputPath);
 		Path outPath = Paths.get(paths[0], paths[1] + "." + ext);
@@ -78,7 +83,7 @@ public class FilesBox {
 	public static String outDirFile(String inputPath) {
 		fileGrowth += 1;
 		String[] paths = pathSplit(inputPath);
-		Path outPath = Paths.get(paths[0], "out", paths[1], paths[1] + "_" + String.valueOf(fileGrowth) + paths[2]);
+		Path outPath = Paths.get(paths[0], paths[1] + "_" + fileGrowth + paths[2]);
 		Path parent = outPath.getParent();
 		if (!Files.exists(parent)) {
 			File file = new File(parent.toString());
