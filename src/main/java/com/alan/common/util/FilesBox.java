@@ -74,6 +74,14 @@ public class FilesBox {
 		return got;
 	}
 
+	public static String standFileName(String inputPath) {
+		String[] rep = {"|", ">", "<", ":", "*", "?"};
+		for (String s : rep) {
+			inputPath = inputPath.replace(s, "");
+		}
+		return inputPath;
+	}
+
 	/**
 	 * generate new filenames time by time
 	 *

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.alan.common.util.FilesBox;
 import com.alan.common.util.StringBox;
@@ -46,43 +47,27 @@ public class SubtitleBox implements SubtitleBoxInterface {
 	}
 
 	@Override
-	public List<String> getAll() {
+	public List<SubtitleBody> getAll() {
 		ArrayList<String> subtitles = new ArrayList<>();
-		List<SubtitleBody> filters = filters(subtitleBodies, true, true, false, 0, 0, 0);
-		for (SubtitleBody body : filters) {
-			subtitles.add(body.toBody());
-		}
-		return subtitles;
+		return filters(subtitleBodies, true, true, false, 0, 0, 0);
 	}
 
 	@Override
-	public List<String> getClip(double start, double end) {
+	public List<SubtitleBody> getClip(double start, double end) {
 		ArrayList<String> subtitles = new ArrayList<>();
-		List<SubtitleBody> filters = filters(subtitleBodies, true, true, true, start, end, 0);
-		for (SubtitleBody body : filters) {
-			subtitles.add(body.toBody());
-		}
-		return subtitles;
+		return filters(subtitleBodies, true, true, true, start, end, 0);
 	}
 
 	@Override
-	public List<String> getEnglish() {
+	public List<SubtitleBody> getEnglish() {
 		ArrayList<String> subtitles = new ArrayList<>();
-		List<SubtitleBody> filters = filters(subtitleBodies, false, true, false, 0, 0, 0);
-		for (SubtitleBody body : filters) {
-			subtitles.add(body.toBody());
-		}
-		return subtitles;
+		return filters(subtitleBodies, false, true, false, 0, 0, 0);
 	}
 
 	@Override
-	public List<String> getChinese() {
+	public List<SubtitleBody> getChinese() {
 		ArrayList<String> subtitles = new ArrayList<>();
-		List<SubtitleBody> filters = filters(subtitleBodies, true, false, false, 0, 0, 0);
-		for (SubtitleBody body : filters) {
-			subtitles.add(body.toBody());
-		}
-		return subtitles;
+		return filters(subtitleBodies, true, false, false, 0, 0, 0);
 	}
 
 	public void forEach(Consumer<SubtitleBody> consumer) {
@@ -130,10 +115,6 @@ public class SubtitleBox implements SubtitleBoxInterface {
 		return subtitleBodies;
 	}
 
-	private boolean checkChinese(String word) {
-		return StringBox.checkChinese(word);
-	}
-
 	public SubtitleBody filter(SubtitleBody subtitleBody, boolean chinese, boolean english, boolean clip, double start,
 			double end, double delay) {
 		if (clip) {
@@ -148,12 +129,12 @@ public class SubtitleBox implements SubtitleBoxInterface {
 		List<String> text = subtitleBody.text;
 		for (int i = text.size() - 1; i > -1; i--) {
 			if (!chinese) {
-				if (checkChinese(text.get(i))) {
+				if (StringBox.checkChinese(text.get(i))) {
 					text.remove(i);
 				}
 			}
 			if (!english) {
-				if (!checkChinese(text.get(i))) {
+				if (!StringBox.checkChinese(text.get(i))) {
 					text.remove(i);
 				}
 			}
@@ -176,21 +157,17 @@ public class SubtitleBox implements SubtitleBoxInterface {
 		return newBodies;
 	}
 
-	public List<String> getByFilter(boolean chinese, boolean english, boolean clip, double start, double end,
+	public List<SubtitleBody> getByFilter(boolean chinese, boolean english, boolean clip, double start, double end,
 			double delay) {
-		ArrayList<String> subtitles = new ArrayList<>();
-		List<SubtitleBody> filters = filters(subtitleBodies, chinese, english, clip, start, end, delay);
-		for (SubtitleBody body : filters) {
-			subtitles.add(body.toBody());
-		}
-		return subtitles;
+		return filters(subtitleBodies, chinese, english, clip, start, end, delay);
 	}
 
-	public boolean write(List<String> subtitle, String file) {
+	public boolean write(List<SubtitleBody> subtitle, String file) {
 		if (subtitle.isEmpty()) {
 			return false;
 		}
-		FilesBox.writer(subtitle, file);
+		List<String> collect = subtitle.stream().map(SubtitleBody::toBody).collect(Collectors.toList());
+		FilesBox.writer(collect, file);
 		return true;
 	}
 
