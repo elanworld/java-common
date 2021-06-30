@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @apiNote : just using package of jdk
@@ -45,6 +47,14 @@ public class StringBox {
 			return args[index - 1];
 		}
 		return input();
+	}
+
+	public static List<String> splitText(String text) {
+		String[] split = new String[]{"，", "。", "？", ",", "."};
+		for (String s : split) {
+			text = text.replace(s, "\n");
+		}
+		return Arrays.stream(text.split("\n")).collect(Collectors.toList());
 	}
 
 	public static boolean checkChinese(String word) {

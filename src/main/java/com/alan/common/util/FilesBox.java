@@ -8,12 +8,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FilesBox {
 	static int fileGrowth = 0;
+	static List<String> tempFiles = new ArrayList<>();
 
 	public static String[] pathSplit(String path) {
 		File file = new File(path);
@@ -28,7 +30,8 @@ public class FilesBox {
 		if (split.length >= 1) {
 			basename = split[0];
 		}
-		return new String[]{parent, basename, ext, name};
+		String[] strings = {parent, basename, ext, name};
+		return Arrays.stream(strings).map(str -> str == null ? "" : str).toArray(String[]::new);
 	}
 
 	public static String outFile(String inputPath, String add) {
@@ -98,6 +101,16 @@ public class FilesBox {
 			file.mkdirs();
 		}
 		return outPath.toString();
+	}
+
+	public static String temp(String inputFile) {
+		tempFiles.add(inputFile);
+		return inputFile;
+	}
+
+	public static void tempDelete() {
+		tempFiles.forEach(file -> new File(file).delete());
+		tempFiles.clear();
 	}
 
 	public static List<String> directoryList(String dir) {
