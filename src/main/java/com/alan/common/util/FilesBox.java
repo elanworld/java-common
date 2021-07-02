@@ -78,7 +78,7 @@ public class FilesBox {
 	}
 
 	public static String standFileName(String inputPath) {
-		String[] rep = {"|", ">", "<", ":", "*", "?"};
+		String[] rep = {"|", ">", "<", ":", "*", "?", "/", "\\"};
 		for (String s : rep) {
 			inputPath = inputPath.replace(s, "");
 		}
