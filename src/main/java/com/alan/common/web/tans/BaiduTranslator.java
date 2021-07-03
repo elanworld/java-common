@@ -34,7 +34,7 @@ public class BaiduTranslator {
 		} catch (Exception ignored) {
 			Output.print(trans_result);
 		}
-		Output.print("baidu translator:", query, ":", result);
+		Output.print("baidu translator:", query, "-->", result);
 		return result;
 	}
 
