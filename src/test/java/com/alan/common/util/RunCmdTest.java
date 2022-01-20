@@ -12,6 +12,6 @@ public class RunCmdTest {
 
 	@Test
 	public void run() {
-		new RunCmd("cd c:\\");
+		new RunCmd("curl baidu.com");
 	}
 }

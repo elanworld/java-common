@@ -3,7 +3,7 @@ package com.alan.common.system;
 import java.io.File;
 
 public enum PathsEnum {
-    TEST("D:\\Alan\\link\\program\\resources\\test.db"), LOG_PATH(getLogPath());
+    TEST("test.db"), LOG_PATH(getLogPath());
 
     private static String logDirectory;
 

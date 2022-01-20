@@ -12,7 +12,7 @@ public class BaiduTranslatorTest {
 
 	@Test
 	public void translate() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			System.out.println(System.currentTimeMillis());
 			BaiduTranslator.translate("nice to meet you", true);
 		}
