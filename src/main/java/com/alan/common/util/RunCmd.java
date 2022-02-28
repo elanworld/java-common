@@ -35,11 +35,11 @@ public class RunCmd implements RunCmdInterface {
 		run(command);
 	}
 
-	public ArrayList<String> getOutput() {
+	public List<String> getOutput() {
 		return streamOut.getResult();
 	}
 
-	public ArrayList<String> getError() {
+	public List<String> getError() {
 		return streamError.getResult();
 	}
 
@@ -66,7 +66,7 @@ public class RunCmd implements RunCmdInterface {
 
 	@Override
 	public List<String> getResult() {
-		ArrayList<String> output = getOutput();
+		List<String> output = getOutput();
 		output.addAll(getError());
 		return output;
 	}
