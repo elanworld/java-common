@@ -36,6 +36,7 @@ public class FilesBox {
 
     public static String outFile(String inputPath, String add) {
         String[] paths = pathSplit(inputPath);
+        new File(paths[0]).mkdirs();
         Path outPath = Paths.get(paths[0], paths[1] + "_" + add + paths[2]);
         return outPath.toString();
     }
