@@ -67,6 +67,10 @@ public class SubtitleBody implements Serializable, Cloneable {
 		return text;
 	}
 
+	public void setText(List<String> text) {
+		this.text = text;
+	}
+
 	public void addText(String text) {
 		if (!text.equals("\n")) {
 			this.text.add(text);

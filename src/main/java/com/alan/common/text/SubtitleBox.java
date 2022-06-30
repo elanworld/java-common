@@ -8,6 +8,7 @@ package com.alan.common.text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import com.alan.common.util.FilesBox;
 import com.alan.common.util.StringBox;
+import com.alan.common.web.tans.BaiduTranslator;
 
 /**
  * @Description: srt字幕工具
@@ -116,7 +118,7 @@ public class SubtitleBox implements SubtitleBoxInterface {
 	}
 
 	public SubtitleBody filter(SubtitleBody subtitleBody, boolean chinese, boolean english, boolean clip, double start,
-			double end, double delay) {
+							   double end, double delay) {
 		if (clip) {
 			if (subtitleBody.start < start || subtitleBody.end > end) {
 				return null;
@@ -146,7 +148,7 @@ public class SubtitleBox implements SubtitleBoxInterface {
 	}
 
 	public List<SubtitleBody> filters(List<SubtitleBody> bodies, boolean chinese, boolean english, boolean clip,
-			double start, double end, double delay) {
+									  double start, double end, double delay) {
 		ArrayList<SubtitleBody> newBodies = new ArrayList<>();
 		for (SubtitleBody body : bodies) {
 			SubtitleBody filter = filter(body, chinese, english, clip, start, end, delay);
@@ -158,7 +160,7 @@ public class SubtitleBox implements SubtitleBoxInterface {
 	}
 
 	public List<SubtitleBody> getByFilter(boolean chinese, boolean english, boolean clip, double start, double end,
-			double delay) {
+										  double delay) {
 		return filters(subtitleBodies, chinese, english, clip, start, end, delay);
 	}
 
@@ -183,4 +185,63 @@ public class SubtitleBox implements SubtitleBoxInterface {
 		return subtitleBodies;
 	}
 
+	public List<SubtitleBody> transSubtitles(List<SubtitleBody> subtitleBodies) {
+		subtitleBodies.forEach(sub -> {
+			if (sub.getText().size() == 1) {
+				if (!StringBox.checkChinese(sub.getText().get(0))) {
+					sub.getText().add(BaiduTranslator.translate(sub.getText().get(0), true));
+				} else {
+					sub.getText().add(BaiduTranslator.translate(sub.getText().get(0), false));
+				}
+			}
+		});
+		return subtitleBodies;
+	}
+
+	/**
+	 * 翻译字幕
+	 *
+	 * @param subtitleBodies
+	 * @param zh
+	 * @return
+	 */
+	public List<SubtitleBody> transSubtitles(List<SubtitleBody> subtitleBodies, Boolean zh) {
+		subtitleBodies.forEach(sub -> {
+			AtomicReference<Integer> lan = new AtomicReference<>(); // all 0, zh 1, en 2
+			// 检测中英文
+			sub.getText().forEach(v -> {
+				if (StringBox.checkChinese(v)) {
+					lan.set(lan.get() == null ? 1 : lan.get() == 0 ? 0 : lan.get() == 1 ? 1 : 0);
+				} else {
+					lan.set(lan.get() == null ? 2 : lan.get() == 0 ? 0 : lan.get() == 1 ? 0 : 2);
+				}
+			});
+			if (lan.get() == 1 && (zh == null || !zh)) {
+				ArrayList<String> strings = new ArrayList<>();
+				sub.getText().forEach(v -> {
+					strings.add(BaiduTranslator.translate(v,false));
+				});
+				if (Boolean.FALSE.equals(zh)) {
+					sub.setText(strings);
+				} else {
+					sub.getText().addAll(strings);
+				}
+			} else if (lan.get() == 2 && (zh ==null || zh)){
+				ArrayList<String> strings = new ArrayList<>();
+				sub.getText().forEach(v -> {
+					strings.add(BaiduTranslator.translate(v,true));
+				});
+				if (Boolean.TRUE.equals(zh)) {
+					sub.setText(strings);
+				} else {
+					sub.getText().addAll(strings);
+				}
+			}
+		});
+		return subtitleBodies;
+	}
+
+	public void setSubtitleBodies(List<SubtitleBody> subtitleBodies) {
+		this.subtitleBodies = subtitleBodies;
+	}
 }
